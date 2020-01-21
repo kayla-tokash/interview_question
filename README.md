@@ -7,6 +7,7 @@ To compile, clone this git repo to a linux machine and simply run "cmake . && ma
 To run, you can get the tool tip by running "./interview", and you can run the program by executing "./interview \<infile\> \<regex/dirty words file\> \<outfile\>"
 
 Compiled successfully using:
+
 Ubuntu 16.04 lts
 GCC 5.4.0
 CMake 3.5.1
