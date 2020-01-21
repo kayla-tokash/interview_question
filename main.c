@@ -79,8 +79,6 @@ void applyFilterToString(char* regexPattern, char** pString)
     // Clean up, and hand off filtered string
     free(*pString);
     *pString = newString;
-
-    printf("newString (%u bytes): %s\n", strlen(newString), newString);
 }
 
 
