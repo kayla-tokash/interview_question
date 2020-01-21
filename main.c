@@ -6,7 +6,12 @@
 
 #define BUFFER_SIZE 1024
 
-// Lines may be seperated by whitespace
+/**
+ * void applyFilterToString(char* regexPattern, char** pString)
+ * Parameters:
+ *   char*  regexPattern - The regex pattern supplied by the dirty words file.
+ *   char** pString - The contents of the input file.
+ **/
 void applyFilterToString(char* regexPattern, char** pString) 
 {   
     char* nlToken, *nlEndToken, *wsToken, *wsEndToken;
@@ -25,7 +30,7 @@ void applyFilterToString(char* regexPattern, char** pString)
         return;
     }
 
-    // Empty the string to prevent garbage problem (needs more investigation)
+    // Empty the string to prevent garbage problem with strcat
     strcpy(newString, "");
     
     // Find new line seperated tokens first 
@@ -81,7 +86,6 @@ void applyFilterToString(char* regexPattern, char** pString)
     *pString = newString;
 }
 
-
 int main(int argc, char** argv)
 {
     char buffer[BUFFER_SIZE];
@@ -96,26 +100,23 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // Get command line args
     inFilePath = argv[1];
     filterFilePath = argv[2];
     outFilePath = argv[3];
-    
-    // Read "in" file
+   
+    printf("Reading input file.\n");
+ 
     fIn = fopen(inFilePath, "r");
     if (NULL == fIn)
     {
-        // todo check errno
         printf("Error reading file. %s [%u]\n", strerror(errno), errno);
         return 1;
     }
 
-    // Trick to get the filesize
     fseek(fIn, 0L, SEEK_END);
     inputFileSize = ftell(fIn);
     rewind(fIn);
 
-    // Allocate a variable for the inputfile conents, and fille it
     fileContents = (char*) malloc(inputFileSize);
     int i = 0;
     char c = fgetc(fIn);
@@ -125,20 +126,20 @@ int main(int argc, char** argv)
         c = fgetc(fIn);
         ++i;
     }
+
     printf("Read %u bytes from file.\n", inputFileSize);
 
-    // Close the file
     fclose(fIn);
 
-    // Iterate through the filters, and apply them to the text
+    printf("Applying \"dirty word\" filters.\n");
+
     fFilter = fopen(filterFilePath, "r");
     if (NULL == fFilter)
     { 
         printf("Error writing file. %s [%u]\n", strerror(errno), errno);
         return 1;
     }
-    
-    // Read in filters
+
     while (fscanf(fFilter, "%s", buffer) != EOF)
     {
         applyFilterToString(buffer, &fileContents);   
@@ -146,21 +147,19 @@ int main(int argc, char** argv)
     
     fclose(fFilter);
 
-    // Write "out" file
+    printf("Writing to output file\n");
+
     fOut = fopen(outFilePath, "w+");
     if (NULL == fOut)
-    {   // todo check errno
+    {
+        printf("Error writing to file. %s [%u]\n", strerror(errno), errno);
         return 1;
     }
     fputs(fileContents, fOut);
-
     fclose(fOut);
 
-    // clean up allocated memory
     free(fileContents);
 
     printf("Thank you for your time! ~Kayla\n");
 }
-
-
 
