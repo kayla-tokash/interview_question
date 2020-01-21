@@ -1,0 +1,3 @@
+/home/ktokash/git/interview_question/CMakeFiles/edit_cache.dir
+/home/ktokash/git/interview_question/CMakeFiles/rebuild_cache.dir
+/home/ktokash/git/interview_question/CMakeFiles/interview.dir

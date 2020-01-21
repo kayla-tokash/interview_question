@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/interview.dir/main.c.o  -o interview -rdynamic 
